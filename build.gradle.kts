@@ -7,7 +7,6 @@ version = "1.0-SNAPSHOT"
 
 allprojects {
     plugins.apply("org.jetbrains.kotlin.jvm")
-    println(this)
 
     repositories {
         mavenCentral()

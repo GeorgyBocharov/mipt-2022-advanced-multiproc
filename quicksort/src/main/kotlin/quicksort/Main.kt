@@ -1,9 +1,19 @@
 package quicksort
 
+import org.openjdk.jmh.results.format.ResultFormatType
+import org.openjdk.jmh.runner.Runner
+import org.openjdk.jmh.runner.options.OptionsBuilder
+
+const val SEED = 13
+const val ARRAY_LENGTH = 1_000_000
+
 fun main() {
-    val array = arrayOf(25, 38, 95, 79, 81)
-    println(array.contentToString())
-    val sorter = SynchronousQuickSorter()
-    val arr = sorter.sort(array)
-    println(arr.contentToString())
+    val options = OptionsBuilder()
+        .include(JmhAsyncSorter::class.java.simpleName)
+        .include(JmhSyncSorter::class.java.simpleName)
+        .resultFormat(ResultFormatType.JSON)
+        .result("benchmark_sequence.json")
+        .output("benchmark_sequence.log")
+        .build()
+    Runner(options).run()
 }

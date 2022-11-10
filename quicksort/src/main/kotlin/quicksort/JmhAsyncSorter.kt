@@ -10,25 +10,30 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
-@Warmup(iterations = 1)
-@Measurement(iterations = 3, time = 2, timeUnit = TimeUnit.SECONDS)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 3)
+@BenchmarkMode(Mode.AverageTime)
+@Measurement(iterations = 7, batchSize = 1)
+@Fork(1)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 open class JmhAsyncSorter {
-    private val sorter = AsyncQuickSorter()
-    private lateinit var array :Array<Int>
+    @Param("10000000", "40000000", "70000000", "100000000")
+    private var arraySize: Int = 0
+
+    private val asyncSorter =  AsyncQuickSorter(500_000)
+    private lateinit var array: Array<Int>
     private lateinit var threadPool: ExecutorService
 
     @Setup(Level.Invocation)
     fun createArray() {
         val random = Random(SEED)
-        array = Array(ARRAY_LENGTH) { random.nextInt() }
+        array = Array(arraySize) { random.nextInt() }
         threadPool = Executors.newFixedThreadPool(4)
     }
 
     @Benchmark
     fun sort(): Unit = runBlocking {
         val job = launch(threadPool.asCoroutineDispatcher()) {
-            sorter.sort(array, 0, array.size - 1)
+            asyncSorter.sort(array)
         }
         job.join()
     }

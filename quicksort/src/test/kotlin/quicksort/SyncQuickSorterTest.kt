@@ -34,4 +34,14 @@ class SyncQuickSorterTest {
         job.join()
         assertThat(unsorted).isSorted
     }
+
+    @Test
+    fun `sort random array async`(): Unit = runBlocking {
+        val unsorted = Array(100_000) { Random.nextInt() }
+        val job = launch(Dispatchers.Default) {
+            asyncSorter.sort(unsorted)
+        }
+        job.join()
+        assertThat(unsorted).isSorted
+    }
 }

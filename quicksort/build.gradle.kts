@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.junit.jupiter:junit-jupiter:5.8.1")
     kapt("org.openjdk.jmh:jmh-generator-annprocess:1.35")
     implementation("org.openjdk.jmh:jmh-core:1.35")
     implementation("org.openjdk.jmh:jmh-generator-annprocess:1.21")

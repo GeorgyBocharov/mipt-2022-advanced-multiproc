@@ -2,16 +2,15 @@ package bfs
 
 import java.util.Optional
 
-class SyncBfs(private val size: Int) {
-    private val visitedNodes = BooleanArray(size * size * size)
+class SyncBfs(size: Int) {
+    private val visitedNodes = BooleanArray(size * size * size) {false}
     private val childrenProvider = ChildrenProvider(size)
 
     fun allVisited(): Boolean {
-        return Optional.ofNullable(visitedNodes.find { false }).orElse(false)
+        return Optional.ofNullable(visitedNodes.find { false }).orElse(true)
     }
 
-    fun bfs(startIndex: Int): IntArray {
-        val result = IntArray(size * size * size) { -1 }
+    fun bfs(startIndex: Int, result:IntArray) {
         val queue = ArrayDeque<Int>()
         result[startIndex] = 0
         queue.addLast(startIndex)
@@ -22,12 +21,11 @@ class SyncBfs(private val size: Int) {
             val nodeNeighbors = childrenProvider.getNodeChildren(nodeIndex)
             for (childIndex in nodeNeighbors) {
                 if (!visitedNodes[childIndex]) {
-                    queue.add(childIndex)
+                    queue.addLast(childIndex)
                     visitedNodes[childIndex] = true
                     result[childIndex] = currentDistance + 1
                 }
             }
         }
-        return result
     }
 }

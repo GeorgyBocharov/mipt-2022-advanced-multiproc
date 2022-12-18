@@ -1,7 +1,6 @@
 package bfs
 
 class ChildrenProvider(private val size: Int) {
-
     fun getDegree(i: Int): Int {
         val z: Int = i / (size * size)
         val y: Int = (i % (size * size)) / size

@@ -10,7 +10,8 @@ class SyncBfsTest {
 
     @Test
     fun `find distances in cube array`() {
-        val distances = bfsSync.bfs(0)
+        val distances = IntArray(size* size* size)
+        bfsSync.bfs(0, distances)
         testDistances(distances)
     }
 

@@ -1,4 +1,4 @@
 rootProject.name = 'mipt-2022-advanced-multiproc'
 
-include ':quicksort'
+include ':kotlin'
 

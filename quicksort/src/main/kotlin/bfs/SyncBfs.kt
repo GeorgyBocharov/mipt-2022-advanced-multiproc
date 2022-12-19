@@ -1,14 +1,9 @@
 package bfs
 
-import java.util.Optional
 
 class SyncBfs(size: Int) {
     private val visitedNodes = BooleanArray(size * size * size) {false}
     private val childrenProvider = ChildrenProvider(size)
-
-    fun allVisited(): Boolean {
-        return Optional.ofNullable(visitedNodes.find { false }).orElse(true)
-    }
 
     fun bfs(startIndex: Int, result:IntArray) {
         val queue = ArrayDeque<Int>()

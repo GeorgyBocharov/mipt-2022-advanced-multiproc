@@ -1,0 +1,42 @@
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 1; Result time: 12521
+[SYNC] SUCCESS
+[SYNC] iter 1; Result time: 18728
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 2; Result time: 10504
+[SYNC] SUCCESS
+[SYNC] iter 2; Result time: 18941
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 3; Result time: 10619
+[SYNC] SUCCESS
+[SYNC] iter 3; Result time: 18255
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 4; Result time: 10487
+[SYNC] SUCCESS
+[SYNC] iter 4; Result time: 18424
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 5; Result time: 10590
+[SYNC] SUCCESS
+[SYNC] iter 5; Result time: 18396
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 6; Result time: 10640
+[SYNC] SUCCESS
+[SYNC] iter 6; Result time: 18428
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 7; Result time: 10613
+[SYNC] SUCCESS
+[SYNC] iter 7; Result time: 18334
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 8; Result time: 10747
+[SYNC] SUCCESS
+[SYNC] iter 8; Result time: 18345
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 9; Result time: 10536
+[SYNC] SUCCESS
+[SYNC] iter 9; Result time: 18316
+[ASYNC] SUCCESS
+[ASYNC] ParLim: 700; iter 10; Result time: 10489
+[SYNC] SUCCESS
+[SYNC] iter 10; Result time: 18377
+[ASYNC FINAL] ParLim: 700; Result time: 10774.6
+[SYNC FINAL] Result time: 18454.4

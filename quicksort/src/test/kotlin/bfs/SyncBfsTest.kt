@@ -1,17 +1,30 @@
 package bfs
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
-private const val size = 40
+private const val size = 100
 
 class SyncBfsTest {
-    private val bfsSync = SyncBfs(size)
 
     @Test
     fun `find distances in cube array`() {
+        val bfsSync = SyncBfs(size)
         val distances = IntArray(size* size* size)
         bfsSync.bfs(0, distances)
+        testDistances(distances)
+    }
+
+    @Test
+    fun `find distances in cube array async`(): Unit = runBlocking{
+        val distances = IntArray(size* size* size)
+        val bfsAsync = AsyncBfs(size, 700)
+        launch(Dispatchers.Default) {
+            bfsAsync.bfs(0, distances, this)
+        }.join()
         testDistances(distances)
     }
 

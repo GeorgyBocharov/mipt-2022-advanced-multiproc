@@ -1,60 +1,50 @@
 package bfs
 
-import kotlinx.coroutines.*
-import org.openjdk.jmh.results.format.ResultFormatType
-import org.openjdk.jmh.runner.Runner
-import org.openjdk.jmh.runner.options.OptionsBuilder
-import java.util.concurrent.ExecutorService
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.math.ceil
 import kotlin.system.measureTimeMillis
-
-private val ctr = AtomicInteger(0)
 
 fun main(): Unit = runBlocking {
     val arraySize = 500
-    val syncBfs = SyncBfs(arraySize)
     val result = IntArray(arraySize * arraySize * arraySize) { -1 }
     val pool = Executors.newFixedThreadPool(4)
+    val parLim = 700
 
-    for (parLim in 700 .. 1500 step 100) {
-        var millis = 0L
-        for (i in 1..3) {
-            val asyncBfs = AsyncBfs(arraySize, parLim)
-            val singleIterMillis = measureTimeMillis {
-                val job = launch(pool.asCoroutineDispatcher()) {
-                    asyncBfs.bfs(0, result, this)
-                }
-                job.join()
+    var millisAsync = 0L
+    var millisSync = 0L
+    val iterations = 10
+    for (i in 1..iterations) {
+        val asyncBfs = AsyncBfs(arraySize, parLim)
+        val syncBfs = SyncBfs(arraySize)
+        val singleAsync = measureTimeMillis {
+            val job = launch(pool.asCoroutineDispatcher()) {
+                asyncBfs.bfs(0, result, this)
             }
-            println("ParLim: $parLim; iter $i; Result time: $singleIterMillis")
-            millis += singleIterMillis
+            job.join()
         }
-        println("ParLim: $parLim; Result time: ${millis / 3.0}")
+        if (correctDistances(result, arraySize)) {
+            println("[ASYNC] SUCCESS")
+        } else {
+            println("[ASYNC] FAILED")
+        }
+        println("[ASYNC] ParLim: $parLim; iter $i; Result time: $singleAsync")
+        val singleSync = measureTimeMillis {
+            syncBfs.bfs(0, result)
+        }
+        if (correctDistances(result, arraySize)) {
+            println("[SYNC] SUCCESS")
+        } else {
+            println("[SYNC] FAILED")
+        }
+        println("[SYNC] iter $i; Result time: $singleSync")
+        millisAsync += singleAsync
+        millisSync += singleSync
     }
+    println("[ASYNC FINAL] ParLim: $parLim; Result time: ${millisAsync / iterations.toDouble()}")
+    println("[SYNC FINAL] Result time: ${millisSync / iterations.toDouble()}")
     pool.shutdown()
-//    ParLim: 3000; Result time: 28479
-//    ParLim: 3500; Result time: 31132
-//    ParLim: 4000; Result time: 29363
-//    ParLim: 4500; Result time: 29119
-//    ParLim: 5000; Result time: 29256
-//    if (correctDistances(result, arraySize)) {
-//        println("SUCCESS")
-//    } else {
-//        println("FAILED")
-//    }
-
-
-//    val options = OptionsBuilder()
-////        .include(JmhAsyncBfs::class.java.simpleName)
-//        .include(JmhSyncBfs::class.java.simpleName)
-//        .resultFormat(ResultFormatType.JSON)
-//        .jvmArgsAppend("-XX:-BackgroundCompilation", "-XmX:5G")
-//        .result("benchmark_async_vs_sync_bfs.json")
-//        .output("benchmark_async_vs_sync_bfs.log")
-//        .build()
-//    Runner(options).run()
 }
 
 private fun correctDistances(distances: IntArray, size: Int): Boolean {
@@ -69,17 +59,4 @@ private fun correctDistances(distances: IntArray, size: Int): Boolean {
         }
     }
     return res
-}
-
-private fun prettyPrint(res: Array<Array<IntArray>>) {
-    val size = res.size
-    for (y in 0 until size) {
-        println("(x, z), y = $y")
-        for (z in size - 1 downTo 0) {
-            for (x in 0 until size) {
-                print("${res[x][y][z]}\t")
-            }
-            println()
-        }
-    }
 }

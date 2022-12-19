@@ -3,17 +3,15 @@ package bfs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicIntegerArray
 import kotlin.math.ceil
 import kotlin.math.log2
 import kotlin.math.pow
 
 
-class AsyncBfs(size: Int, private val parallelLimit:Int) {
+class AsyncBfs(size: Int, private val parallelLimit: Int) {
     private val visitedNodes = AtomicIntegerArray(size * size * size)
     private val childrenProvider = ChildrenProvider(size)
-    private val filterScan = IntArray(size * size * 6)
 
     suspend fun bfs(start: Int, result: IntArray, scope: CoroutineScope) {
         var frontier = IntArray(1)
@@ -22,56 +20,46 @@ class AsyncBfs(size: Int, private val parallelLimit:Int) {
         visitedNodes.set(start, 1)
         var frontierSize = frontier.size
         while (frontierSize > 0) {
-//            println("CurrentFrontier: ${frontier.contentToString()}, $frontierSize")
             val degreeArr = IntArray(frontierSize)
             scope.launch {
                 runSplit(0, frontierSize, 1, parallelLimit, scope) { i ->
                     degreeArr[i] = childrenProvider.getDegree(frontier[i])
                 }
             }.join()
-//            println("Degrees: ${degreeArr.contentToString()}")
-            val nextFrontier = withContext(scope.coroutineContext) { parallelScan(degreeArr, degreeArr.size, scope) }
-//            println("nextFrontier: ${nextFrontier.contentToString()}")
-//            println("Degrees prefix: ${degreeArr.contentToString()}")
+            val nextFrontier = scan(degreeArr)
+            val nextFrontierSize = nextFrontier.size
+            val filterScan = IntArray(nextFrontierSize)
             scope.launch {
                 runSplit(0, frontierSize, 1, parallelLimit / 6, scope) { i ->
-                    filterChildrenSync(frontier, i, result, nextFrontier, degreeArr)
+                    val degree = if (i == 0) {0} else {degreeArr[i-1]}
+                    filterChildrenSync(frontier[i], result, nextFrontier, degree)
                 }
             }.join()
-//            println("children: ${nextFrontier.contentToString()}")
             scope.launch {
-                runSplit(0, nextFrontier.size, 1, parallelLimit, scope) { i ->
+                runSplit(0, nextFrontierSize, 1, parallelLimit, scope) { i ->
                     if (nextFrontier[i] != -1) {
                         filterScan[i] = 1
                     }
                 }
             }.join()
-//            println("mapRes: ${filterScan.contentToString()}")
-            frontier = withContext(scope.coroutineContext) { parallelScan(filterScan, nextFrontier.size, scope) }
-//            println("filterScan: ${filterScan.contentToString()}")
-//            println("newFrontier: ${frontier.contentToString()}")
+            frontier = scan(filterScan)
             frontierSize = frontier.size
             scope.launch {
                 runSplit(0, nextFrontier.size - 1, 1, parallelLimit, scope) { i ->
-                    if (filterScan[i] != filterScan[i + 1]) {
-                        frontier[filterScan[i]] = nextFrontier[i]
+                    val value = if (i == 0) {0} else {filterScan[i - 1]}
+                    if (value != filterScan[i]) {
+                        frontier[value] = nextFrontier[i]
                     }
                 }
             }.join()
-            if (filterScan[nextFrontier.size - 1] != frontierSize) {
+            if (filterScan[nextFrontier.size - 2] != frontierSize) {
                 frontier[frontierSize - 1] = nextFrontier[nextFrontier.size - 1]
             }
-//            println("frontierAfterFilter: ${frontier.contentToString()}")
-            val remapRes = scope.launch {
-                runSplit(0, nextFrontier.size, 1, parallelLimit, scope) { i ->
-                    filterScan[i] = 0
-                }
-            }
-            remapRes.join()
         }
     }
 
-    private suspend fun parallelScan(x: IntArray, n: Int, scope: CoroutineScope): IntArray {
+    private suspend fun parallelScan(x: IntArray, scope: CoroutineScope): IntArray {
+        val n = x.size
         val pad = 2.0.pow(ceil(log2(n.toDouble()))).toInt() - n
         scope.launch {
             scanForward(x, n, pad, scope)
@@ -84,12 +72,18 @@ class AsyncBfs(size: Int, private val parallelLimit:Int) {
         return nextFrontier
     }
 
+    private fun scan(x: IntArray): IntArray {
+        for (i in 0 until x.size - 1) {
+            x[i + 1] += x[i]
+        }
+        return IntArray(x[x.size - 1]) { -1 }
+    }
+
     private suspend fun scanForward(x: IntArray, realSize: Int, pad: Int, scope: CoroutineScope) {
         val n = realSize + pad
         val upperBound = log2(n.toDouble()).toInt() - 1
         for (d in 0..upperBound) {
             val job = scope.launch {
-//                println("Forward, thread: ${Thread.currentThread().id}")
                 runSplit(0, n, 2.0.pow(d + 1).toInt(), parallelLimit, scope) { i ->
                     val exp = 2.0.pow(d).toInt()
                     incrementWithPad(x, i + exp * 2 - 1, pad, getWithPad(x, i + exp - 1, pad))
@@ -104,7 +98,6 @@ class AsyncBfs(size: Int, private val parallelLimit:Int) {
         val upperBound = log2(n.toDouble()).toInt() - 1
         for (d in upperBound downTo 0) {
             val job = scope.launch {
-//                println("Backward, thread: ${Thread.currentThread().id}")
                 runSplit(0, n, 2.0.pow(d + 1).toInt(), parallelLimit, scope) { i ->
                     val exp = 2.0.pow(d).toInt()
                     val temp = getWithPad(x, i + exp - 1, pad)
@@ -132,7 +125,14 @@ class AsyncBfs(size: Int, private val parallelLimit:Int) {
             x[i - pad] = value
     }
 
-    private suspend fun runSplit(l: Int, r: Int, step: Int, limit: Int, scope: CoroutineScope, syncFun: (i: Int) -> Unit) {
+    private suspend fun runSplit(
+        l: Int,
+        r: Int,
+        step: Int,
+        limit: Int,
+        scope: CoroutineScope,
+        syncFun: (i: Int) -> Unit
+    ) {
         val actualLimit: Int = if ((r - l) / step.toDouble() < limit) {
             r - l
         } else {
@@ -142,7 +142,6 @@ class AsyncBfs(size: Int, private val parallelLimit:Int) {
         for (start in l until r step actualLimit) {
             val job = scope.launch {
                 val end = Integer.min(actualLimit + start, r - l)
-//                println("($start, $end), step: $step Thread ${Thread.currentThread().id}")
                 for (i in start until end step (step)) {
                     syncFun(i)
                 }
@@ -155,20 +154,18 @@ class AsyncBfs(size: Int, private val parallelLimit:Int) {
     }
 
     private fun filterChildrenSync(
-        frontier: IntArray,
-        i: Int,
+        nodeIndex: Int,
         result: IntArray,
         nextFrontier: IntArray,
-        degreeArr: IntArray
+        degree: Int
     ) {
         var ctr = 0
-        val nodeIndex = frontier[i]
         val nodeChildren = childrenProvider.getNodeChildren(nodeIndex)
-//        println("Children of node $nodeIndex: $nodeChildren")
+        val currentDistance = result[nodeIndex]
         for (childIndex in nodeChildren) {
             if (visitedNodes.compareAndSet(childIndex, 0, 1)) {
-                result[childIndex] = result[nodeIndex] + 1
-                nextFrontier[degreeArr[i] + ctr] = childIndex
+                result[childIndex] = currentDistance + 1
+                nextFrontier[degree + ctr] = childIndex
                 ctr++
             }
         }

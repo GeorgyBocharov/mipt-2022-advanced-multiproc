@@ -9,7 +9,7 @@ import kotlin.math.log2
 import kotlin.math.pow
 
 
-class AsyncBfs(size: Int, private val parallelLimit: Int) {
+class AsyncBfs(size: Int, private val parallelLimit: Int, private val parallelScanLimit: Int) {
     private val visitedNodes = AtomicIntegerArray(size * size * size)
     private val childrenProvider = ChildrenProvider(size)
 
@@ -26,12 +26,24 @@ class AsyncBfs(size: Int, private val parallelLimit: Int) {
                     degreeArr[i] = childrenProvider.getDegree(frontier[i])
                 }
             }.join()
-            val nextFrontier = scan(degreeArr)
+            if (degreeArr.size < parallelScanLimit) {
+                scan(degreeArr)
+            } else {
+                scope.launch {
+                    parallelScanV2(degreeArr, parallelScanLimit, scope)
+                }.join()
+            }
+
+            val nextFrontier = IntArray(degreeArr[degreeArr.size - 1]) { -1 }
             val nextFrontierSize = nextFrontier.size
             val filterScan = IntArray(nextFrontierSize)
             scope.launch {
                 runSplit(0, frontierSize, 1, parallelLimit / 6, scope) { i ->
-                    val degree = if (i == 0) {0} else {degreeArr[i-1]}
+                    val degree = if (i == 0) {
+                        0
+                    } else {
+                        degreeArr[i - 1]
+                    }
                     filterChildrenSync(frontier[i], result, nextFrontier, degree)
                 }
             }.join()
@@ -42,11 +54,22 @@ class AsyncBfs(size: Int, private val parallelLimit: Int) {
                     }
                 }
             }.join()
-            frontier = scan(filterScan)
+            if (filterScan.size < parallelScanLimit) {
+                scan(filterScan)
+            } else {
+                scope.launch {
+                    parallelScanV2(filterScan, parallelScanLimit, scope)
+                }.join()
+            }
+            frontier = IntArray(filterScan[filterScan.size - 1]) { -1 }
             frontierSize = frontier.size
             scope.launch {
                 runSplit(0, nextFrontier.size - 1, 1, parallelLimit, scope) { i ->
-                    val value = if (i == 0) {0} else {filterScan[i - 1]}
+                    val value = if (i == 0) {
+                        0
+                    } else {
+                        filterScan[i - 1]
+                    }
                     if (value != filterScan[i]) {
                         frontier[value] = nextFrontier[i]
                     }
@@ -72,11 +95,47 @@ class AsyncBfs(size: Int, private val parallelLimit: Int) {
         return nextFrontier
     }
 
-    private fun scan(x: IntArray): IntArray {
+    private suspend fun parallelScanV2(x: IntArray, limit: Int, scope: CoroutineScope) {
+        val endIndices = ArrayList<Int>()
+        val jobs = ArrayList<Job>()
+        for (start in x.indices step limit) {
+            val end = start + Integer.min(limit, x.size - start)
+            endIndices.add(end)
+            val job = scope.launch {
+                for (i in start until end - 1) {
+                    x[i + 1] += x[i]
+                }
+            }
+            jobs.add(job)
+        }
+        for (job in jobs) {
+            job.join()
+        }
+        val additions = IntArray(endIndices.size - 1)
+        var currentAddition = 0
+        for (i in additions.indices) {
+            currentAddition += x[endIndices[i] - 1]
+            additions[i] = currentAddition
+        }
+        val restJobs = ArrayList<Job>()
+        for (start in additions.indices) {
+            val job = scope.launch {
+                val addition = additions[start]
+                for (i in endIndices[start] until endIndices[start + 1]) {
+                    x[i] += addition
+                }
+            }
+            restJobs.add(job)
+        }
+        for (job in restJobs) {
+            job.join()
+        }
+    }
+
+    private fun scan(x: IntArray) {
         for (i in 0 until x.size - 1) {
             x[i + 1] += x[i]
         }
-        return IntArray(x[x.size - 1]) { -1 }
     }
 
     private suspend fun scanForward(x: IntArray, realSize: Int, pad: Int, scope: CoroutineScope) {

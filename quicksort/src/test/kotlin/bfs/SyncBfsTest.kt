@@ -21,7 +21,7 @@ class SyncBfsTest {
     @Test
     fun `find distances in cube array async`(): Unit = runBlocking{
         val distances = IntArray(size* size* size)
-        val bfsAsync = AsyncBfs(size, 700)
+        val bfsAsync = AsyncBfs(size, 700, 60_000)
         launch(Dispatchers.Default) {
             bfsAsync.bfs(0, distances, this)
         }.join()

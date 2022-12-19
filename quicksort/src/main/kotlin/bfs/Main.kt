@@ -11,13 +11,25 @@ fun main(): Unit = runBlocking {
     val result = IntArray(arraySize * arraySize * arraySize) { -1 }
     val pool = Executors.newFixedThreadPool(4)
     val parLim = 700
+    val parScanLimit = 300_000
 
     var millisAsync = 0L
     var millisSync = 0L
     val iterations = 10
     for (i in 1..iterations) {
-        val asyncBfs = AsyncBfs(arraySize, parLim)
+        val asyncBfs = AsyncBfs(arraySize, parLim, parScanLimit)
         val syncBfs = SyncBfs(arraySize)
+
+        val singleSync = measureTimeMillis {
+            syncBfs.bfs(0, result)
+        }
+        if (correctDistances(result, arraySize)) {
+            println("[SYNC] SUCCESS")
+        } else {
+            println("[SYNC] FAILED")
+        }
+        println("[SYNC] iter $i; time: $singleSync")
+
         val singleAsync = measureTimeMillis {
             val job = launch(pool.asCoroutineDispatcher()) {
                 asyncBfs.bfs(0, result, this)
@@ -29,16 +41,7 @@ fun main(): Unit = runBlocking {
         } else {
             println("[ASYNC] FAILED")
         }
-        println("[ASYNC] ParLim: $parLim; iter $i; Result time: $singleAsync")
-        val singleSync = measureTimeMillis {
-            syncBfs.bfs(0, result)
-        }
-        if (correctDistances(result, arraySize)) {
-            println("[SYNC] SUCCESS")
-        } else {
-            println("[SYNC] FAILED")
-        }
-        println("[SYNC] iter $i; Result time: $singleSync")
+        println("[ASYNC] ParLim: $parLim; iter $i; time: $singleAsync")
         millisAsync += singleAsync
         millisSync += singleSync
     }

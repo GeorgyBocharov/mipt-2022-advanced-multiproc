@@ -1,0 +1,215 @@
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63840:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhAsyncSorter.sort
+# Parameters: (arraySize = 10000000)
+
+# Run progress: 0,00% complete, ETA 00:10:00
+# Fork: 1 of 1
+# Warmup Iteration   1: 2154020967,600 ns/op
+# Warmup Iteration   2: 1817104647,167 ns/op
+# Warmup Iteration   3: 1837935303,400 ns/op
+Iteration   1: 1739219442,000 ns/op
+Iteration   2: 1724963807,333 ns/op
+Iteration   3: 1670722196,667 ns/op
+Iteration   4: 1636508579,167 ns/op
+Iteration   5: 1629998851,167 ns/op
+Iteration   6: 1723788812,833 ns/op
+Iteration   7: 1794348901,167 ns/op
+
+
+Result "quicksort.JmhAsyncSorter.sort":
+  1702792941,476 ±(99.9%) 134389491,306 ns/op [Average]
+  (min, avg, max) = (1629998851,167, 1702792941,476, 1794348901,167), stdev = 59669766,976
+  CI (99.9%): [1568403450,170, 1837182432,782] (assumes normal distribution)
+
+
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63840:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhAsyncSorter.sort
+# Parameters: (arraySize = 40000000)
+
+# Run progress: 16,67% complete, ETA 00:09:23
+# Fork: 1 of 1
+# Warmup Iteration   1: 9496067811,000 ns/op
+# Warmup Iteration   2: 9732973838,500 ns/op
+# Warmup Iteration   3: 9818048180,000 ns/op
+Iteration   1: 10000893850,000 ns/op
+Iteration   2: 9724457074,000 ns/op
+Iteration   3: 9991685619,000 ns/op
+Iteration   4: 9738334501,000 ns/op
+Iteration   5: 10038121786,000 ns/op
+Iteration   6: 9868273930,000 ns/op
+Iteration   7: 11594654918,000 ns/op
+
+
+Result "quicksort.JmhAsyncSorter.sort":
+  10136631668,286 ±(99.9%) 1475595573,057 ns/op [Average]
+  (min, avg, max) = (9724457074,000, 10136631668,286, 11594654918,000), stdev = 655173578,969
+  CI (99.9%): [8661036095,229, 11612227241,342] (assumes normal distribution)
+
+
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63840:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhAsyncSorter.sort
+# Parameters: (arraySize = 70000000)
+
+# Run progress: 33,33% complete, ETA 00:07:44
+# Fork: 1 of 1
+# Warmup Iteration   1: 24434838269,000 ns/op
+# Warmup Iteration   2: 23544852498,000 ns/op
+# Warmup Iteration   3: 24045151788,000 ns/op
+Iteration   1: 20088288860,000 ns/op
+Iteration   2: 20183614532,000 ns/op
+Iteration   3: 20646506970,000 ns/op
+Iteration   4: 19420878672,000 ns/op
+Iteration   5: 18355288302,000 ns/op
+Iteration   6: 17913851678,000 ns/op
+Iteration   7: 17988217357,000 ns/op
+
+
+Result "quicksort.JmhAsyncSorter.sort":
+  19228092338,714 ±(99.9%) 2556102403,376 ns/op [Average]
+  (min, avg, max) = (17913851678,000, 19228092338,714, 20646506970,000), stdev = 1134925307,726
+  CI (99.9%): [16671989935,338, 21784194742,090] (assumes normal distribution)
+
+
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63840:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhSyncSorter.sort
+# Parameters: (arraySize = 10000000)
+
+# Run progress: 50,00% complete, ETA 00:07:38
+# Fork: 1 of 1
+# Warmup Iteration   1: 4818399416,500 ns/op
+# Warmup Iteration   2: 4107839538,667 ns/op
+# Warmup Iteration   3: 4177088560,667 ns/op
+Iteration   1: 4279149405,000 ns/op
+Iteration   2: 4261074885,000 ns/op
+Iteration   3: 4312568033,333 ns/op
+Iteration   4: 4289548168,333 ns/op
+Iteration   5: 4407681093,000 ns/op
+Iteration   6: 4230298655,667 ns/op
+Iteration   7: 4270053500,667 ns/op
+
+
+Result "quicksort.JmhSyncSorter.sort":
+  4292910534,429 ±(99.9%) 127456505,467 ns/op [Average]
+  (min, avg, max) = (4230298655,667, 4292910534,429, 4407681093,000), stdev = 56591478,298
+  CI (99.9%): [4165454028,961, 4420367039,896] (assumes normal distribution)
+
+
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63840:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhSyncSorter.sort
+# Parameters: (arraySize = 40000000)
+
+# Run progress: 66,67% complete, ETA 00:04:53
+# Fork: 1 of 1
+# Warmup Iteration   1: 24167695801,000 ns/op
+# Warmup Iteration   2: 22325242138,000 ns/op
+# Warmup Iteration   3: 23570130599,000 ns/op
+Iteration   1: 25192572210,000 ns/op
+Iteration   2: 25235282030,000 ns/op
+Iteration   3: 25659081944,000 ns/op
+Iteration   4: 25789109309,000 ns/op
+Iteration   5: 24110594158,000 ns/op
+Iteration   6: 24124991780,000 ns/op
+Iteration   7: 25241255532,000 ns/op
+
+
+Result "quicksort.JmhSyncSorter.sort":
+  25050412423,286 ±(99.9%) 1523823567,099 ns/op [Average]
+  (min, avg, max) = (24110594158,000, 25050412423,286, 25789109309,000), stdev = 676587107,201
+  CI (99.9%): [23526588856,187, 26574235990,385] (assumes normal distribution)
+
+
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63840:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhSyncSorter.sort
+# Parameters: (arraySize = 70000000)
+
+# Run progress: 83,33% complete, ETA 00:02:48
+# Fork: 1 of 1
+# Warmup Iteration   1: 46344565011,000 ns/op
+# Warmup Iteration   2: 47756123802,000 ns/op
+# Warmup Iteration   3: 48198455008,000 ns/op
+Iteration   1: 48188387692,000 ns/op
+Iteration   2: 48354393635,000 ns/op
+Iteration   3: 48030300382,000 ns/op
+Iteration   4: 48058774456,000 ns/op
+Iteration   5: 48195538733,000 ns/op
+Iteration   6: 47970504757,000 ns/op
+Iteration   7: 47914798426,000 ns/op
+
+
+Result "quicksort.JmhSyncSorter.sort":
+  48101814011,571 ±(99.9%) 343121170,951 ns/op [Average]
+  (min, avg, max) = (47914798426,000, 48101814011,571, 48354393635,000), stdev = 152347926,286
+  CI (99.9%): [47758692840,620, 48444935182,523] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:22:20
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark            (arraySize)  Mode  Cnt            Score            Error  Units
+JmhAsyncSorter.sort     10000000  avgt    7   1702792941,476 ±  134389491,306  ns/op
+JmhAsyncSorter.sort     40000000  avgt    7  10136631668,286 ± 1475595573,057  ns/op
+JmhAsyncSorter.sort     70000000  avgt    7  19228092338,714 ± 2556102403,376  ns/op
+JmhSyncSorter.sort      10000000  avgt    7   4292910534,429 ±  127456505,467  ns/op
+JmhSyncSorter.sort      40000000  avgt    7  25050412423,286 ± 1523823567,099  ns/op
+JmhSyncSorter.sort      70000000  avgt    7  48101814011,571 ±  343121170,951  ns/op
+
+Benchmark result is saved to benchmark_async_vs_sync_quicksort_diff_size.json

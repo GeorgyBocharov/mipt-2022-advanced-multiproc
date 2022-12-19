@@ -1,0 +1,197 @@
+[
+    {
+        "jmhVersion" : "1.35",
+        "benchmark" : "quicksort.JmhAsyncSorter.sort",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 10,
+        "jvm" : "/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=62050:/Applications/IntelliJ IDEA.app/Contents/bin",
+            "-Dfile.encoding=UTF-8",
+            "-XX:-BackgroundCompilation"
+        ],
+        "jdkVersion" : "11.0.14",
+        "vmName" : "OpenJDK 64-Bit Server VM",
+        "vmVersion" : "11.0.14+9",
+        "warmupIterations" : 3,
+        "warmupTime" : "10 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 7,
+        "measurementTime" : "10 s",
+        "measurementBatchSize" : 1,
+        "primaryMetric" : {
+            "score" : 3.514039504025714E10,
+            "scoreError" : 9.136212958444226E8,
+            "scoreConfidence" : [
+                3.422677374441272E10,
+                3.605401633610156E10
+            ],
+            "scorePercentiles" : {
+                "0.0" : 3.0757961051E10,
+                "50.0" : 3.50176980765E10,
+                "90.0" : 3.83446471315E10,
+                "95.0" : 3.914224993865E10,
+                "99.0" : 4.2911456928E10,
+                "99.9" : 4.2911456928E10,
+                "99.99" : 4.2911456928E10,
+                "99.999" : 4.2911456928E10,
+                "99.9999" : 4.2911456928E10,
+                "100.0" : 4.2911456928E10
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    3.3128698833E10,
+                    3.4180178895E10,
+                    3.0757961051E10,
+                    3.1890570697E10,
+                    3.2508180684E10,
+                    3.1191780754E10,
+                    3.2267383713E10
+                ],
+                [
+                    3.2412367653E10,
+                    3.2370779189E10,
+                    3.4077683669E10,
+                    3.2389181814E10,
+                    3.3381475903E10,
+                    3.3611038668E10,
+                    3.4006400674E10
+                ],
+                [
+                    3.1910036632E10,
+                    3.1223416119E10,
+                    3.2477619661E10,
+                    3.2573854121E10,
+                    3.3736771366E10,
+                    3.7532412191E10,
+                    3.4313225457E10
+                ],
+                [
+                    3.785010205E10,
+                    3.9681864705E10,
+                    3.4845234285E10,
+                    3.3588182722E10,
+                    3.5598811579E10,
+                    3.6686175369E10,
+                    3.6534690236E10
+                ],
+                [
+                    3.5610081174E10,
+                    3.7127449352E10,
+                    3.6069205055E10,
+                    3.5041988308E10,
+                    3.4993407845E10,
+                    3.61131031E10,
+                    3.4037303716E10
+                ],
+                [
+                    3.5202851117E10,
+                    3.700603714E10,
+                    3.8413338246E10,
+                    3.6576350645E10,
+                    3.8685355985E10,
+                    3.8700746948E10,
+                    4.0108232756E10
+                ],
+                [
+                    3.4265216493E10,
+                    3.4947698103E10,
+                    4.2911456928E10,
+                    3.8399596585E10,
+                    3.545866193E10,
+                    3.5043576935E10,
+                    3.468524851E10
+                ],
+                [
+                    3.6353260735E10,
+                    3.4100983106E10,
+                    3.5818161497E10,
+                    3.6794158695E10,
+                    3.5073948701E10,
+                    3.5337456996E10,
+                    3.5139422469E10
+                ],
+                [
+                    3.4861465726E10,
+                    3.5097098756E10,
+                    3.47596442E10,
+                    3.6146661928E10,
+                    3.4993077321E10,
+                    3.5465474353E10,
+                    3.6894100663E10
+                ],
+                [
+                    3.6317926264E10,
+                    3.439982582E10,
+                    3.4524177572E10,
+                    3.4105294576E10,
+                    3.4843806995E10,
+                    3.6694444585E10,
+                    3.5984276299E10
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "jmhVersion" : "1.35",
+        "benchmark" : "quicksort.JmhSyncSorter.sort",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=62050:/Applications/IntelliJ IDEA.app/Contents/bin",
+            "-Dfile.encoding=UTF-8",
+            "-XX:-BackgroundCompilation"
+        ],
+        "jdkVersion" : "11.0.14",
+        "vmName" : "OpenJDK 64-Bit Server VM",
+        "vmVersion" : "11.0.14+9",
+        "warmupIterations" : 3,
+        "warmupTime" : "10 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 7,
+        "measurementTime" : "10 s",
+        "measurementBatchSize" : 1,
+        "primaryMetric" : {
+            "score" : 9.376464084042857E10,
+            "scoreError" : 3.2948547659730625E9,
+            "scoreConfidence" : [
+                9.04697860744555E10,
+                9.705949560640164E10
+            ],
+            "scorePercentiles" : {
+                "0.0" : 9.1476520743E10,
+                "50.0" : 9.4061974236E10,
+                "90.0" : 9.5513251099E10,
+                "95.0" : 9.5513251099E10,
+                "99.0" : 9.5513251099E10,
+                "99.9" : 9.5513251099E10,
+                "99.99" : 9.5513251099E10,
+                "99.999" : 9.5513251099E10,
+                "99.9999" : 9.5513251099E10,
+                "100.0" : 9.5513251099E10
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    9.4405240124E10,
+                    9.1476520743E10,
+                    9.5513251099E10,
+                    9.3473028413E10,
+                    9.2304387872E10,
+                    9.5118083396E10,
+                    9.4061974236E10
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    }
+]
+
+

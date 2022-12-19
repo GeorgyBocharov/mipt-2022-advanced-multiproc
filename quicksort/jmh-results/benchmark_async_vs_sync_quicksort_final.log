@@ -1,0 +1,222 @@
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=62050:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhAsyncSorter.sort
+
+# Run progress: 0,00% complete, ETA 00:18:20
+# Fork: 1 of 10
+# Warmup Iteration   1: 29321084403,000 ns/op
+# Warmup Iteration   2: 28490073348,000 ns/op
+# Warmup Iteration   3: 28969602346,000 ns/op
+Iteration   1: 33128698833,000 ns/op
+Iteration   2: 34180178895,000 ns/op
+Iteration   3: 30757961051,000 ns/op
+Iteration   4: 31890570697,000 ns/op
+Iteration   5: 32508180684,000 ns/op
+Iteration   6: 31191780754,000 ns/op
+Iteration   7: 32267383713,000 ns/op
+
+# Run progress: 9,09% complete, ETA 00:58:21
+# Fork: 2 of 10
+# Warmup Iteration   1: 30833400951,000 ns/op
+# Warmup Iteration   2: 32959123820,000 ns/op
+# Warmup Iteration   3: 32586435268,000 ns/op
+Iteration   1: 32412367653,000 ns/op
+Iteration   2: 32370779189,000 ns/op
+Iteration   3: 34077683669,000 ns/op
+Iteration   4: 32389181814,000 ns/op
+Iteration   5: 33381475903,000 ns/op
+Iteration   6: 33611038668,000 ns/op
+Iteration   7: 34006400674,000 ns/op
+<JMH had finished, but forked VM did not exit, are there stray running threads? Waiting 24 seconds more...>
+
+Non-finished threads:
+
+Thread[DestroyJavaVM,5,main]
+
+
+
+# Run progress: 18,18% complete, ETA 00:54:56
+# Fork: 3 of 10
+# Warmup Iteration   1: 29723358629,000 ns/op
+# Warmup Iteration   2: 32178574914,000 ns/op
+# Warmup Iteration   3: 32277114457,000 ns/op
+Iteration   1: 31910036632,000 ns/op
+Iteration   2: 31223416119,000 ns/op
+Iteration   3: 32477619661,000 ns/op
+Iteration   4: 32573854121,000 ns/op
+Iteration   5: 33736771366,000 ns/op
+Iteration   6: 37532412191,000 ns/op
+Iteration   7: 34313225457,000 ns/op
+
+# Run progress: 27,27% complete, ETA 00:49:25
+# Fork: 4 of 10
+# Warmup Iteration   1: 34383571495,000 ns/op
+# Warmup Iteration   2: 36702504044,000 ns/op
+# Warmup Iteration   3: 36377545227,000 ns/op
+Iteration   1: 37850102050,000 ns/op
+Iteration   2: 39681864705,000 ns/op
+Iteration   3: 34845234285,000 ns/op
+Iteration   4: 33588182722,000 ns/op
+Iteration   5: 35598811579,000 ns/op
+Iteration   6: 36686175369,000 ns/op
+Iteration   7: 36534690236,000 ns/op
+
+# Run progress: 36,36% complete, ETA 00:44:36
+# Fork: 5 of 10
+# Warmup Iteration   1: 35995125689,000 ns/op
+# Warmup Iteration   2: 36331202541,000 ns/op
+# Warmup Iteration   3: 35416253453,000 ns/op
+Iteration   1: 35610081174,000 ns/op
+Iteration   2: 37127449352,000 ns/op
+Iteration   3: 36069205055,000 ns/op
+Iteration   4: 35041988308,000 ns/op
+Iteration   5: 34993407845,000 ns/op
+Iteration   6: 36113103100,000 ns/op
+Iteration   7: 34037303716,000 ns/op
+
+# Run progress: 45,45% complete, ETA 00:38:57
+# Fork: 6 of 10
+# Warmup Iteration   1: 38155557525,000 ns/op
+# Warmup Iteration   2: 38048523862,000 ns/op
+# Warmup Iteration   3: 35652882191,000 ns/op
+Iteration   1: 35202851117,000 ns/op
+Iteration   2: 37006037140,000 ns/op
+Iteration   3: 38413338246,000 ns/op
+Iteration   4: 36576350645,000 ns/op
+Iteration   5: 38685355985,000 ns/op
+Iteration   6: 38700746948,000 ns/op
+Iteration   7: 40108232756,000 ns/op
+<JMH had finished, but forked VM did not exit, are there stray running threads? Waiting 24 seconds more...>
+
+Non-finished threads:
+
+Thread[DestroyJavaVM,5,main]
+
+
+
+# Run progress: 54,55% complete, ETA 00:33:04
+# Fork: 7 of 10
+# Warmup Iteration   1: 35526060016,000 ns/op
+# Warmup Iteration   2: 35775944591,000 ns/op
+# Warmup Iteration   3: 34651306095,000 ns/op
+Iteration   1: 34265216493,000 ns/op
+Iteration   2: 34947698103,000 ns/op
+Iteration   3: 42911456928,000 ns/op
+Iteration   4: 38399596585,000 ns/op
+Iteration   5: 35458661930,000 ns/op
+Iteration   6: 35043576935,000 ns/op
+Iteration   7: 34685248510,000 ns/op
+
+# Run progress: 63,64% complete, ETA 00:26:42
+# Fork: 8 of 10
+# Warmup Iteration   1: 32241271712,000 ns/op
+# Warmup Iteration   2: 34476668611,000 ns/op
+# Warmup Iteration   3: 35233464326,000 ns/op
+Iteration   1: 36353260735,000 ns/op
+Iteration   2: 34100983106,000 ns/op
+Iteration   3: 35818161497,000 ns/op
+Iteration   4: 36794158695,000 ns/op
+Iteration   5: 35073948701,000 ns/op
+Iteration   6: 35337456996,000 ns/op
+Iteration   7: 35139422469,000 ns/op
+<JMH had finished, but forked VM did not exit, are there stray running threads? Waiting 24 seconds more...>
+
+Non-finished threads:
+
+Thread[DestroyJavaVM,5,main]
+
+
+
+# Run progress: 72,73% complete, ETA 00:20:04
+# Fork: 9 of 10
+# Warmup Iteration   1: 33399819642,000 ns/op
+# Warmup Iteration   2: 36692220089,000 ns/op
+# Warmup Iteration   3: 36162153620,000 ns/op
+Iteration   1: 34861465726,000 ns/op
+Iteration   2: 35097098756,000 ns/op
+Iteration   3: 34759644200,000 ns/op
+Iteration   4: 36146661928,000 ns/op
+Iteration   5: 34993077321,000 ns/op
+Iteration   6: 35465474353,000 ns/op
+Iteration   7: 36894100663,000 ns/op
+
+# Run progress: 81,82% complete, ETA 00:13:25
+# Fork: 10 of 10
+# Warmup Iteration   1: 33037098372,000 ns/op
+# Warmup Iteration   2: 39255089791,000 ns/op
+# Warmup Iteration   3: 36117584959,000 ns/op
+Iteration   1: 36317926264,000 ns/op
+Iteration   2: 34399825820,000 ns/op
+Iteration   3: 34524177572,000 ns/op
+Iteration   4: 34105294576,000 ns/op
+Iteration   5: 34843806995,000 ns/op
+Iteration   6: 36694444585,000 ns/op
+Iteration   7: 35984276299,000 ns/op
+<JMH had finished, but forked VM did not exit, are there stray running threads? Waiting 24 seconds more...>
+
+Non-finished threads:
+
+Thread[DestroyJavaVM,5,main]
+
+
+
+
+Result "quicksort.JmhAsyncSorter.sort":
+  35140395040,257 ±(99.9%) 913621295,844 ns/op [Average]
+  (min, avg, max) = (30757961051,000, 35140395040,257, 42911456928,000), stdev = 2223880666,372
+  CI (99.9%): [34226773744,413, 36054016336,102] (assumes normal distribution)
+
+
+# JMH version: 1.35
+# VM version: JDK 11.0.14, OpenJDK 64-Bit Server VM, 11.0.14+9
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=62050:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -XX:-BackgroundCompilation
+# Blackhole mode: full + dont-inline hint (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 7 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: quicksort.JmhSyncSorter.sort
+
+# Run progress: 90,91% complete, ETA 00:06:43
+# Fork: 1 of 1
+# Warmup Iteration   1: 96098493304,000 ns/op
+# Warmup Iteration   2: 95729997001,000 ns/op
+# Warmup Iteration   3: 91286961653,000 ns/op
+Iteration   1: 94405240124,000 ns/op
+Iteration   2: 91476520743,000 ns/op
+Iteration   3: 95513251099,000 ns/op
+Iteration   4: 93473028413,000 ns/op
+Iteration   5: 92304387872,000 ns/op
+Iteration   6: 95118083396,000 ns/op
+Iteration   7: 94061974236,000 ns/op
+
+
+Result "quicksort.JmhSyncSorter.sort":
+  93764640840,429 ±(99.9%) 3294854765,973 ns/op [Average]
+  (min, avg, max) = (91476520743,000, 93764640840,429, 95513251099,000), stdev = 1462935934,900
+  CI (99.9%): [90469786074,456, 97059495606,402] (assumes normal distribution)
+
+
+# Run complete. Total time: 01:23:33
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark            Mode  Cnt            Score            Error  Units
+JmhAsyncSorter.sort  avgt   70  35140395040,257 ±  913621295,844  ns/op
+JmhSyncSorter.sort   avgt    7  93764640840,429 ± 3294854765,973  ns/op
+
+Benchmark result is saved to benchmark_async_vs_sync_quicksort_final.json

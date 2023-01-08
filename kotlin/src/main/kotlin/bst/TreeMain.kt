@@ -18,8 +18,8 @@ fun main(): Unit = runBlocking {
     val operationExecutor = OperationExecutor()
 
 
-    for (x in arrayOf(100)) {
-        for (t in 2..maxThreads) {
+    for (x in arrayOf(0, 10, 50)) {
+        for (t in 1..maxThreads) {
             val k = IntArray(50) { i -> i + 1 }
             val resultList = prepopulate(k, Random(13))
             val parBst = ParallelBst()
@@ -65,7 +65,6 @@ fun process(
     runWithCheck: Boolean,
     operationsQueue: LinkedBlockingQueue<Operation>
 ): Pair<Long, Long> {
-    println("Running in thread ${Thread.currentThread().id}")
     val random = Random(13)
     var counter = 0L
     val end = System.currentTimeMillis() + 5_000

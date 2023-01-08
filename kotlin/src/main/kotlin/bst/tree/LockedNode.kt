@@ -31,11 +31,23 @@ class LockedNode(var value: Int, var isTransit: Boolean = false) {
     }
 
     fun lockLeftRef(expected: LockedNode?): Pair<Lock, Boolean> {
-        return lockRef(leftLock.writeLock(), left, expected)
+        val writeLock = leftLock.writeLock()
+        writeLock.lock()
+        var success = true
+        if (isDeleted.get() || expected !== left) {
+            success = false
+        }
+        return Pair(writeLock, success)
     }
 
     fun lockRightRef(expected: LockedNode?): Pair<Lock, Boolean> {
-        return lockRef(rightLock.writeLock(), right, expected)
+        val writeLock = rightLock.writeLock()
+        writeLock.lock()
+        var success = true
+        if (isDeleted.get() || expected !== right) {
+            success = false
+        }
+        return Pair(writeLock, success)
     }
 
     fun readLockState(): Pair<Lock, Boolean> {
@@ -96,15 +108,6 @@ class LockedNode(var value: Int, var isTransit: Boolean = false) {
         writeLock.lock()
         var success = true
         if (isDeleted.get() || actual === null || actual.value != expected.value) {
-            success = false
-        }
-        return Pair(writeLock, success)
-    }
-
-    private fun lockRef(writeLock: WriteLock, actual: LockedNode?, expected: LockedNode?): Pair<Lock, Boolean> {
-        writeLock.lock()
-        var success = true
-        if (isDeleted.get() || expected !== actual) {
             success = false
         }
         return Pair(writeLock, success)

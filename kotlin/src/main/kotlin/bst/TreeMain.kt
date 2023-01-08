@@ -18,9 +18,9 @@ fun main(): Unit = runBlocking {
     val operationExecutor = OperationExecutor()
 
 
-    for (x in arrayOf(0)) {
-        for (t in 1..maxThreads) {
-            val k = IntArray(10) { i -> i + 1 }
+    for (x in arrayOf(100)) {
+        for (t in 2..maxThreads) {
+            val k = IntArray(50) { i -> i + 1 }
             val resultList = prepopulate(k, Random(13))
             val parBst = ParallelBst()
             val operations = LinkedBlockingQueue<Operation>()
@@ -71,7 +71,7 @@ fun process(
     val end = System.currentTimeMillis() + 5_000
     while (System.currentTimeMillis() < end) {
         val key = resultList[random.nextInt(elementsNumber)]
-        val p = random.nextInt(101)
+        val p = random.nextInt(100)
         counter++
         if (p < x) {
             if (runWithCheck)

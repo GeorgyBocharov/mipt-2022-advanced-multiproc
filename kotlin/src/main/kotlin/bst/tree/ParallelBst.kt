@@ -44,7 +44,7 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
 
                 val (writeLock, writeLockRes) = curr.writeLockState(true)
                 if (!writeLockRes) {
-                    println("Illegal unconditional read state lock")
+                    println("Illegal unconditional write state lock: ${Thread.currentThread().id}")
                     writeLock.unlock()
                     continue
                 } else {
@@ -54,44 +54,41 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
                 }
             }
             val newNode = LockedNode(value)
-            if (value < prev!!.value) {
-                val (readStateLock, readStateLockRes) = prev.readLockState()
-                if (!readStateLockRes) {
-                    println("Illegal unconditional read state lock")
-                    readStateLock.unlock()
-                    continue
-                } else {
-                    val (leftLock, leftLockRes) = prev.lockLeftRef(null)
-                    if (!leftLockRes) {
-                        println("Illegal left lock")
-                        leftLock.unlock()
-                        readStateLock.unlock()
-                        continue
-                    }
-                    prev.left = newNode
+            val (readStateLock, readStateLockRes) = prev!!.readLockState()
+            if (!readStateLockRes) {
+                println("Illegal unconditional read state lock: ${Thread.currentThread().id}")
+                readStateLock.unlock()
+                continue
+            } else if (value < prev.value) {
+                println("Inserting to the left: ${Thread.currentThread().id}")
+                val (leftLock, leftLockRes) = prev.lockLeftRef(null)
+                if (!leftLockRes) {
+                    println("Illegal left lock: ${Thread.currentThread().id}")
                     leftLock.unlock()
                     readStateLock.unlock()
-                    return true
-                }
-            } else {
-                val (readStateLock, readStateLockRes) = prev.readLockState()
-                if (!readStateLockRes) {
-                    println("Illegal unconditional read state lock")
-                    readStateLock.unlock()
+                    println("Inserting to the left failed: ${Thread.currentThread().id}")
                     continue
-                } else {
-                    val (rightLock, rightLockRec) = prev.lockRightRef(null)
-                    if (!rightLockRec) {
-                        println("Illegal right lock")
-                        rightLock.unlock()
-                        readStateLock.unlock()
-                        continue
-                    }
-                    prev.right = newNode
+                }
+                prev.left = newNode
+                leftLock.unlock()
+                readStateLock.unlock()
+                println("Inserting to the left Success: ${Thread.currentThread().id}")
+                return true
+            } else {
+                println("Inserting to the right: ${Thread.currentThread().id}")
+                val (rightLock, rightLockRec) = prev.lockRightRef(null)
+                if (!rightLockRec) {
+                    println("Illegal right lock: ${Thread.currentThread().id}")
                     rightLock.unlock()
                     readStateLock.unlock()
-                    return true
+                    println("Inserting to the right failed: ${Thread.currentThread().id}")
+                    continue
                 }
+                prev.right = newNode
+                rightLock.unlock()
+                readStateLock.unlock()
+                println("Inserting to the right success: ${Thread.currentThread().id}")
+                return true
             }
         }
     }
@@ -106,32 +103,44 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
             }
 
             if (curr.hasTwoChildren()) {
+                println("Attempt to delete with 2 children: ${Thread.currentThread().id}")
                 if (!deleteIfTwoChildren(curr)) {
+                    println("Failed to delete with 2 children: ${Thread.currentThread().id}")
                     continue
                 }
+                println("Success deletion of 2 children: ${Thread.currentThread().id}")
                 return true
             }
             val prev = nodes.second!!
             if (curr.hasSingleChild()) {
+                println("Attempt to delete with 1 child: ${Thread.currentThread().id}")
                 if (!deleteIfSingleChild(prev, curr)) {
+                    println("Failed to delete with 1 child: ${Thread.currentThread().id}")
                     continue
                 }
+                println("Success deletion of 1 child: ${Thread.currentThread().id}")
+                return true
+            }
+            if (!prev.isTransit) {
+                println("Attempt to delete leaf with non transit father: ${Thread.currentThread().id}")
+                if (!deleteLeafWithNonTransitFather(prev, curr, value)) {
+                    println("Failed delete leaf with non transit father: ${Thread.currentThread().id}")
+                    continue
+                }
+                println("Success delete leaf with non transit father: ${Thread.currentThread().id}")
                 return true
             } else {
-                if (!prev.isTransit) {
-                    if (!deleteLeafWithNonTransitFather(prev, curr, value)) {
-                        continue
-                    }
-                    return true
-                } else {
-                    val gprev = nodes.first!!
-                    if (!deleteLeafWithTransitFather(gprev, prev, curr, value)) {
-                        continue
-                    }
-                    return true
+                val gprev = nodes.first!!
+                println("Attempt to delete leaf with non transit father: ${Thread.currentThread().id}")
+                if (!deleteLeafWithTransitFather(gprev, prev, curr, value)) {
+                    println("Failed delete leaf with transit father: ${Thread.currentThread().id}")
+                    continue
                 }
+                println("Success delete leaf with transit father: ${Thread.currentThread().id}")
+                return true
             }
         }
+
     }
 
     override fun contains(value: Int): Boolean {
@@ -144,17 +153,18 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
     }
 
     private fun deleteIfTwoChildren(curr: LockedNode): Boolean {
-        val writeStateLockWithResult = curr.writeLockState(false)
-        if (!writeStateLockWithResult.second) {
-            println("Illegal write state lock")
-            writeStateLockWithResult.first.unlock()
+        val (writeStateLock, writeStateLockRes) = curr.writeLockState(false)
+        if (!writeStateLockRes) {
+            println("deleteIfTwoChildren Illegal writeStateLock $curr: ${Thread.currentThread().id}")
+            writeStateLock.unlock()
             return false
         } else if (!curr.hasTwoChildren()) {
-            writeStateLockWithResult.first.unlock()
+            writeStateLock.unlock()
+            println("deleteIfTwoChildren curr hasn't 2 children anymore $curr: ${Thread.currentThread().id}")
             return false
         } else {
             curr.isTransit = true
-            writeStateLockWithResult.first.unlock()
+            writeStateLock.unlock()
             return true
         }
     }
@@ -162,9 +172,12 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
 
     private fun deleteIfSingleChild(prev: LockedNode, curr: LockedNode): Boolean {
         val child = if (curr.left !== null) {
-            curr.left!!
+            curr.left
         } else {
-            curr.right!!
+            curr.right
+        }
+        if (child === null) {
+            return false
         }
         if (curr.value < prev.value) {
             if (!lockNodeWithSingleChild(prev, curr, child) {
@@ -193,23 +206,26 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
     ): Boolean {
         val (prevChildLock, prevChildLockRes) = prev.lockChildRef(curr)
         if (!prevChildLockRes) {
-            println("Illegal child lock")
+            println("lockNodeWithSingleChild: Illegal child lock: ${Thread.currentThread().id}")
             prevChildLock.unlock()
             return false
         }
         val (writeLock, writeLockRes) = curr.writeLockState(false)
         if (!writeLockRes) {
-            println("Illegal write state lock")
+            println("lockNodeWithSingleChild: Illegal write state lock: ${Thread.currentThread().id}")
             writeLock.unlock()
             prevChildLock.unlock()
             return false
         }
         if (curr.hasTwoChildren() || curr.isLeaf()) {
+            writeLock.unlock()
+            prevChildLock.unlock()
+            println("lockNodeWithSingleChild: Curr is leaf or has 2 children, $curr: ${Thread.currentThread().id}")
             return false
         }
         val (childChildLock, childChildLockRes) = curr.lockChildRef(child)
         if (!childChildLockRes) {
-            println("Illegal child child lock")
+            println("lockNodeWithSingleChild:Illegal child child lock: ${Thread.currentThread().id}")
             childChildLock.unlock()
             writeLock.unlock()
             prevChildLock.unlock()
@@ -250,11 +266,13 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
     ): Boolean {
         val (prevStateLock, prevStateLockRes) = prev.readLockState(false)
         if (!prevStateLockRes) {
+            println("deleteLeafWithNonTransitFatherWithAction: failed to lockReadState $prev: ${Thread.currentThread().id}")
             prevStateLock.unlock()
             return false
         }
         if (!lockLeaf(prev, curr, value, action)) {
             prevStateLock.unlock()
+            println("deleteLeafWithNonTransitFatherWithAction: failed to lockLeaf $prev: ${Thread.currentThread().id}")
             return false
         }
         prevStateLock.unlock()
@@ -304,12 +322,14 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
         val (gprevChildLock, gprevChildLockRes) = gprev.lockChildRef(prev)
         if (!gprevChildLockRes) {
             gprevChildLock.unlock()
+            println("deleteLeafWithTransitFatherWithAction: Failed to lockChildRef on $gprev: ${Thread.currentThread().id}")
             return false
         }
         val (prevWriteStateLock, prevWriteStateLockRes) = prev.writeLockState(true)
         if (!prevWriteStateLockRes) {
             prevWriteStateLock.unlock()
             gprevChildLock.unlock()
+            println("deleteLeafWithTransitFatherWithAction: Failed to lockWriteState on $prev: ${Thread.currentThread().id}")
             return false
         }
         if (child !== null) {
@@ -318,9 +338,11 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
                 prevChildLock.unlock()
                 prevWriteStateLock.unlock()
                 gprevChildLock.unlock()
+                println("deleteLeafWithTransitFatherWithAction: Failed to lockChildRef on $prev: ${Thread.currentThread().id}")
                 return false
             }
             if (!lockLeaf(prev, curr, value, action)) {
+                println("deleteLeafWithTransitFatherWithAction: Failed to lock leaf on $curr, $prev: ${Thread.currentThread().id}")
                 prevChildLock.unlock()
                 prevWriteStateLock.unlock()
                 gprevChildLock.unlock()
@@ -333,6 +355,7 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
             }
         } else {
             if (!lockLeaf(prev, curr, value, action)) {
+                println("deleteLeafWithTransitFatherWithAction, child IS NULL: Failed to lock leaf on $curr, $prev: ${Thread.currentThread().id}")
                 prevWriteStateLock.unlock()
                 gprevChildLock.unlock()
                 return false
@@ -353,6 +376,7 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
         val (prevChildLock, prevChildLockRes) = prev.lockChildValue(curr)
         if (!prevChildLockRes) {
             prevChildLock.unlock()
+            println("Failed to lock child value on $prev: ${Thread.currentThread().id}")
             return false
         }
         val newCurrent = if (value < prev.value) {
@@ -360,13 +384,22 @@ class ParallelBst(val root: LockedNode = LockedNode(-1)) : Bst {
         } else {
             prev.right
         }
+        if (newCurrent !== curr) {
+            prevChildLock.unlock()
+            println("child changed: $prev: ${Thread.currentThread().id}")
+            return false
+        }
         val (newCurrWriteStateLock, newCurrWriteStateLockRes) = newCurrent!!.writeLockState(false)
         if (!newCurrWriteStateLockRes) {
             newCurrWriteStateLock.unlock()
             prevChildLock.unlock()
+            println("Failed to take write state lock on $newCurrent: ${Thread.currentThread().id}")
             return false
         }
         if (!curr.isLeaf()) {
+            newCurrWriteStateLock.unlock()
+            prevChildLock.unlock()
+            println("Node $curr isn't leaf: ${Thread.currentThread().id}")
             return false
         }
         action(newCurrent)
